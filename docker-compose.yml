@@ -1,10 +1,11 @@
 version: '3.7'
 
 services:
+## SERVICOS
   api-servicos:
     image: rafaelptr/api-servicos:0.0.1
     ports:
-      - "8080:8080"
+      - "8081:8081"
     restart: always
     depends_on:
       - db-servicos
@@ -12,9 +13,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-servicos:3306/findsupplier?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+      SERVER_PORT: 8081
     networks:
-      - backend
-
+      - rede
   db-servicos:
     image: mysql:latest
     ports:
@@ -28,10 +29,113 @@ services:
     volumes:
       - db-servicos-data:/var/lib/mysql
     networks:
-      - backend
+      - rede
+      
+  app-findsupplier:
+    image: rafaelptr/findsupplier:0.0.1
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api-servicos
+    restart: always
+    networks:
+      - rede
+
+## clientes      
+  # api-clientes:
+  #   image: rafaelptr/api-clientes:0.0.1
+  #   ports:
+  #     - "8081:8081"
+  #   restart: always
+  #   depends_on:
+  #     - db-clientes
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:mysql://db-clientes:3307/findsupplier?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+  #     SPRING_DATASOURCE_USERNAME: root
+  #     SPRING_DATASOURCE_PASSWORD: root
+  #   networks:
+  #     - rede
+
+  # db-clientes:
+  #   image: mysql:latest
+  #   ports:
+  #     - "3307:3307"
+  #   restart: always
+  #   environment:
+  #     MYSQL_DATABASE: findsupplier
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: root
+  #     MYSQL_ROOT_PASSWORD: root
+  #   volumes:
+  #     - db-clientes-data:/var/lib/mysql
+  #   networks:
+  #     - rede
+
+## contratacao
+  # api-contratacao:
+  #   image: rafaelptr/api-contratacoes:0.0.1
+  #   ports:
+  #     - "8082:8082"
+  #   restart: always
+  #   depends_on:
+  #     - db-contratacao
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:mysql://db-contratacao:3308/findsupplier?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+  #     SPRING_DATASOURCE_USERNAME: root
+  #     SPRING_DATASOURCE_PASSWORD: root
+  #   networks:
+  #     - rede
+
+  # db-contratacao:
+  #   image: mysql:latest
+  #   ports:
+  #     - "3308:3308"
+  #   restart: always
+  #   environment:
+  #     MYSQL_DATABASE: findsupplier
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: root
+  #     MYSQL_ROOT_PASSWORD: root
+  #   volumes:
+  #     - db-contratacao-data:/var/lib/mysql
+  #   networks:
+  #     - rede
+
+## proposta
+  # api-proposta:
+  #   image: rafaelptr/api-propostas:0.0.1
+  #   ports:
+  #     - "8083:8083"
+  #   restart: always
+  #   depends_on:
+  #     - db-proposta
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:mysql://db-proposta:3309/findsupplier?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+  #     SPRING_DATASOURCE_USERNAME: root
+  #     SPRING_DATASOURCE_PASSWORD: root
+  #   networks:
+  #     - rede
+
+  # db-proposta:
+  #   image: mysql:latest
+  #   ports:
+  #     - "3309:3309"
+  #   restart: always
+  #   environment:
+  #     MYSQL_DATABASE: findsupplier
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: root
+  #     MYSQL_ROOT_PASSWORD: root
+  #   volumes:
+  #     - db-proposta-data:/var/lib/mysql
+  #   networks:
+  #     - rede
 
 volumes:
   db-servicos-data:
+  # db-clientes-data:
+  # db-contratacao-data:
+  # db-proposta-data:
 
 networks:
-  backend:
+  rede:

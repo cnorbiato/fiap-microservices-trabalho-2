@@ -4,6 +4,11 @@ services:
 ## SERVICOS
   api-servicos:
     image: rafaelptr/api-servicos:0.0.1
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
     ports:
       - "8081:8081"
     restart: always
@@ -38,6 +43,11 @@ services:
       
   app-findsupplier:
     image: rafaelptr/findsupplier:0.0.1
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
     ports:
       - "8080:8080"
     depends_on:
